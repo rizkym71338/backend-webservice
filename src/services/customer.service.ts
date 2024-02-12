@@ -1,9 +1,9 @@
-import { Input } from '.'
-import { Bcrypt, Signature } from '../../libs'
-import Repository from './repository'
+import { Bcrypt, Signature } from '../libs'
+import { CustomerRepository } from '../repositories'
+import { CustomerInput } from '../types'
 
-export default class Service {
-	private repository = new Repository()
+export class CustomerService {
+	private repository = new CustomerRepository()
 	private signature = new Signature()
 	private bcrypt = new Bcrypt()
 
@@ -11,7 +11,7 @@ export default class Service {
 		return await this.bcrypt.hash(password)
 	}
 
-	private generateToken(input: Input) {
+	private generateToken(input: CustomerInput) {
 		delete input.password
 		return this.signature.generate(input)
 	}
@@ -28,7 +28,7 @@ export default class Service {
 		return { data: customer }
 	}
 
-	async create(input: Input) {
+	async create(input: CustomerInput) {
 		const customer = await this.repository.findByEmail(input.email)
 		if (customer) return { alreadyExists: 'customer already exists' }
 		if (input.password) input.password = await this.hashPassword(input.password)
@@ -36,7 +36,7 @@ export default class Service {
 		return { data: newCustomer }
 	}
 
-	async update(id: string, input: Input) {
+	async update(id: string, input: CustomerInput) {
 		const customer = await this.repository.findById(id)
 		if (!customer) return { notfound: 'customer not found' }
 		const updatedCustomer = await this.repository.updateById(id, input)
@@ -50,7 +50,7 @@ export default class Service {
 		return { data: deletedCustomer }
 	}
 
-	async signUp(input: Input) {
+	async signUp(input: CustomerInput) {
 		const customer = await this.repository.findByEmailWithPassword(input.email)
 		if (customer) return { alredyExists: 'customer already exists' }
 		if (input.password) input.password = await this.hashPassword(input.password)
@@ -59,7 +59,7 @@ export default class Service {
 		return { data: newCustomer, token }
 	}
 
-	async signIn(input: Input) {
+	async signIn(input: CustomerInput) {
 		const customer = await this.repository.findByEmailWithPassword(input.email)
 		if (!customer) return { notfound: 'customer not found' }
 		const validPassword = await this.bcrypt.validate(input.password, customer.password)

@@ -1,12 +1,11 @@
 import { Request, Response } from 'express'
-import { Reply } from '../../libs'
-import Service from './service'
-import Validation from './validation'
+import { CustomerService } from '../services'
+import { CustomerValidation } from '../validations'
+import { Controller } from './controller'
 
-export default class Controller {
-	private reply = new Reply()
-	private service = new Service()
-	private validation = new Validation()
+export class CustomerController extends Controller {
+	private service = new CustomerService()
+	private validation = new CustomerValidation()
 
 	findMany = async (req: Request, res: Response) => {
 		try {

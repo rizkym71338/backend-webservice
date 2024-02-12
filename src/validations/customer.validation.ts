@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { Input } from '.'
+import { CustomerInput } from '../types'
 
-export default class Validation {
-	create(input: Input) {
+export class CustomerValidation {
+	create(input: CustomerInput) {
 		const schema = z.object({
 			name: z.string(),
 			email: z.string().email(),
@@ -11,7 +11,7 @@ export default class Validation {
 		return schema.parse(input)
 	}
 
-	update(input: Input) {
+	update(input: CustomerInput) {
 		const schema = z.object({
 			name: z.string().optional(),
 			email: z.string().email().optional(),
@@ -20,7 +20,7 @@ export default class Validation {
 		return schema.parse(input)
 	}
 
-	signUp(input: Input) {
+	signUp(input: CustomerInput) {
 		const schema = z.object({
 			name: z.string(),
 			email: z.string().email(),
@@ -29,7 +29,7 @@ export default class Validation {
 		return schema.parse(input)
 	}
 
-	signIn(input: Input) {
+	signIn(input: CustomerInput) {
 		const schema = z.object({
 			email: z.string().email(),
 			password: z.string(),

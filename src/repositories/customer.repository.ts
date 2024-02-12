@@ -1,8 +1,14 @@
-import { Input } from '.'
-import { db } from '../../database'
+import { db } from '../database'
+import { CustomerInput } from '../types'
 
-export default class Repository {
-	private selectWithoutPassword = { id: true, name: true, email: true, createdAt: true, updatedAt: true }
+export class CustomerRepository {
+	private selectWithoutPassword = {
+		id: true,
+		name: true,
+		email: true,
+		createdAt: true,
+		updatedAt: true,
+	}
 
 	async findMany() {
 		return await db.customer.findMany({
@@ -32,11 +38,11 @@ export default class Repository {
 		})
 	}
 
-	async create(input: Input) {
+	async create(input: CustomerInput) {
 		return await db.customer.create({ data: input })
 	}
 
-	async updateById(id: string, input: Input) {
+	async updateById(id: string, input: CustomerInput) {
 		return await db.customer.update({ where: { id }, data: input })
 	}
 

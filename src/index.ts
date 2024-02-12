@@ -1,7 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 import { env } from './libs'
-import modules from './modules'
+import { routes } from './routes'
 
 const server = () => {
 	const app = express()
@@ -10,12 +10,10 @@ const server = () => {
 	app.use(express.json())
 	app.use(express.urlencoded({ extended: true }))
 
-	modules(app)
+	routes(app)
 
 	app.listen(env.PORT, () => {
-		console.log(
-			`[server]: Server is running at http://localhost:${env.PORT}`
-		)
+		console.log(`Server is running at http://localhost:${env.PORT} in ${env.MODE} mode`)
 	})
 }
 
